@@ -60,6 +60,24 @@ class ViewController: UIViewController {
         }
     }
     
+
+    
+    func showAlert(title: String, message: String, boutton1: String, boutton2: String? = nil, button2Action: ((UIAlertAction) -> Void)? = nil) {
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        alert.addAction((UIAlertAction(title: boutton1, style: .cancel)))
+        
+        if let butt = boutton2 {
+            alert.addAction(UIAlertAction(title: butt, style: .default, handler: button2Action))
+
+        }
+        
+        present(alert, animated: true, completion: nil)
+
+
+    }
+    
     @IBAction func tapOnLog() {
         
         var title = ""
@@ -74,25 +92,40 @@ class ViewController: UIViewController {
         if predicate.evaluate(with: login.text) || (password.text?.count ?? 0 > 3 ){
             
             if !predicate.evaluate(with: login.text){
+                
                 title = "ERREUR"
                 message = "votre email est invalide"
                 alertButt = "ok"
+                
+                showAlert(title: title, message: message, boutton1: alertButt, boutton2: nil)
+             
                 
             } else if !(password.text?.count ?? 0 > 3 ){
                 title = "ERREUR"
                 message = "votre password fait moins de 4 caractères"
                 alertButt = "ok"
+                
+                showAlert(title: title, message: message, boutton1: alertButt, boutton2: nil)
 
                 
             } else {
                 title = "Bienvenue \(login.text!)"
                 if switchToggle.isOn {
+                    
                     message = "vous etes bien inscrit à notre newsletter"
                     alertButt = "merci"
+                    
+                    showAlert(title: title, message: message, boutton1: alertButt, boutton2: nil)
+                    
                 } else {
                     message = "souhaitez vous vous abonnez à notre newsletter?"
                     alertButt = "non merci"
                     alertButt2 = "m'abonner"
+                    
+                    
+                    showAlert(title: title, message: message, boutton1: alertButt, boutton2: alertButt2) { action in
+                        self.switchToggle.isOn = true
+                    }
                 }
             }
         }
@@ -100,29 +133,29 @@ class ViewController: UIViewController {
                 title = "ERREUR"
                 message = "veillez remplir votre mdp et votre login"
                 alertButt = "ok"
+                
+                showAlert(title: title, message: message, boutton1: alertButt, boutton2: nil)
             }
             
             
         
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//
+//        if alert.title == "ERREUR" {
+//            alert.addAction((UIAlertAction(title: alertButt, style: .cancel)))
+//        } else {
+//            if switchToggle.isOn {
+//            alert.addAction((UIAlertAction(title: alertButt, style: .cancel)))
+//
+//
+//            } else {
+//                alert.addAction(UIAlertAction(title: alertButt, style: .default))
+//
+//                alert.addAction((UIAlertAction(title: alertButt2, style: .cancel, handler: { _ in self.switchToggle.isOn = true })))
+//
+//            }
+//        }
         
-        if alert.title == "ERREUR" {
-            alert.addAction((UIAlertAction(title: alertButt, style: .cancel)))
-        } else {
-            if switchToggle.isOn {
-            alert.addAction((UIAlertAction(title: alertButt, style: .cancel)))
-            
-            
-            } else {
-                alert.addAction(UIAlertAction(title: alertButt, style: .default))
-                
-                alert.addAction((UIAlertAction(title: alertButt2, style: .cancel, handler: { _ in self.switchToggle.isOn = true })))
-                
-            }
-        }
         
-        
-        present(alert, animated: true, completion: nil)
     }
  
     
